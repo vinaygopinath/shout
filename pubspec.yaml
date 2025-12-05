@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  auto_size_text_field: ^2.2.4
 
 dev_dependencies:
   flutter_test:

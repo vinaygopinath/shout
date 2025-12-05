@@ -1,4 +1,3 @@
-import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -31,36 +30,69 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late TextEditingController _textEditingControllerOne;
+  late TextEditingController _textEditingController;
   late FocusNode _focusNode;
+  double _fontSize = 700;
+  static const double _minFontSize = 24;
+  static const double _maxFontSize = 700;
+  static const double _padding = 16.0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox.expand(
-        child: Center(
-          child: AutoSizeTextField(
-              controller: _textEditingControllerOne,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Padding(
+            padding: const EdgeInsets.all(_padding),
+            child: TextField(
+              controller: _textEditingController,
               focusNode: _focusNode,
-              minFontSize: 24,
-              style: TextStyle(fontSize: 700),
+              style: TextStyle(fontSize: _fontSize),
               keyboardType: TextInputType.multiline,
               maxLines: null,
-              fullwidth: true,
-              wrapWords: true,
+              expands: true,
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(border: InputBorder.none),
+              onChanged: (_) => _adjustFontSize(constraints),
             ),
-        ),
+          );
+        },
       ),
       resizeToAvoidBottomInset: true,
     );
   }
 
+  void _adjustFontSize(BoxConstraints constraints) {
+    final text = _textEditingController.text;
+    if (text.isEmpty) {
+      setState(() => _fontSize = _maxFontSize);
+      return;
+    }
+
+    double fontSize = _maxFontSize;
+
+    while (fontSize > _minFontSize) {
+      final textPainter = TextPainter(
+        text: TextSpan(text: text, style: TextStyle(fontSize: fontSize)),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout(maxWidth: constraints.maxWidth - (_padding * 2));
+
+      if (textPainter.height <= constraints.maxHeight - (_padding * 2)) {
+        break;
+      }
+      fontSize -= 10;
+    }
+
+    if (fontSize != _fontSize) {
+      setState(() => _fontSize = fontSize.clamp(_minFontSize, _maxFontSize));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    _textEditingControllerOne = TextEditingController();
+    _textEditingController = TextEditingController();
     _focusNode = FocusNode();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -70,7 +102,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _textEditingControllerOne.dispose();
+    _textEditingController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
