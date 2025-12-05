@@ -1,0 +1,53 @@
+name: shout
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  auto_size_text_field: ^2.2.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  image_path: "assets/icon-1024.png"
+
+  android: true
+  min_sdk_android: 21
+  adaptive_icon_foreground: "assets/icon-1024.png"
+  adaptive_icon_background: "#673AB7"
+
+  ios: true
+  remove_alpha_ios: true
+
+  web:
+    generate: true
+    image_path: "assets/icon-1024.png"
+    background_color: "#673AB7"
+    theme_color: "#673AB7"
+
+  macos:
+    generate: true
+    image_path: "assets/icon-1024.png"
+
+  windows:
+    generate: true
+    image_path: "assets/icon-1024.png"
+    icon_size: 256
+
+  linux:
+    generate: true
+    image_path: "assets/icon-1024.png"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icon-1024.png
