@@ -32,6 +32,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late TextEditingController _textEditingControllerOne;
+  late FocusNode _focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +41,8 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: AutoSizeTextField(
               controller: _textEditingControllerOne,
+              focusNode: _focusNode,
               minFontSize: 24,
-              autofocus: true,
               style: TextStyle(fontSize: 700),
               keyboardType: TextInputType.multiline,
               maxLines: null,
@@ -60,12 +61,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _textEditingControllerOne = TextEditingController();
+    _focusNode = FocusNode();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
   }
 
   @override
   void dispose() {
     _textEditingControllerOne.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 }
